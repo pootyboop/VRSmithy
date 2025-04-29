@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7749766579104530426}
   - component: {fileID: 1089674369908146603}
+  - component: {fileID: 547243393622158582}
+  - component: {fileID: 3178796333437171377}
   m_Layer: 0
   m_Name: GameHand
   m_TagString: Untagged
@@ -45,6 +47,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a30ddcb18678d3046a4b56f6b365b06a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isRight: 0
+  trueHand: {fileID: 0}
+--- !u!135 &547243393622158582
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5963686853482129223}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!135 &3178796333437171377
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5963686853482129223}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.03
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &2968854440655198333
 PrefabInstance:
   m_ObjectHideFlags: 0

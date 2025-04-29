@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public enum EComponentCategory {
+public enum EComponentCategory
+{
     Attachment_Point,
     Body,
     Activator,
@@ -13,7 +14,8 @@ public enum EComponentCategory {
     Shield
 }
 
-public enum EComponentSubcategory {
+public enum EComponentSubcategory
+{
     None,
     Handle,
     Brace,
@@ -39,8 +41,14 @@ public enum EComponentSubcategory {
 
 public class Component : Item
 {
-    public new string name = "Component";
-    public new EItemCategory itemCategory = EItemCategory.Component;
     public EComponentCategory componentCategory = EComponentCategory.Body;
     public EComponentSubcategory componentSubcategory = EComponentSubcategory.None;
+
+
+
+    void Awake()
+    {
+        name = "Component";
+        itemCategory = EItemCategory.Component;
+    }
 }
