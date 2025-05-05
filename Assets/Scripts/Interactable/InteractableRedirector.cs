@@ -33,10 +33,14 @@ public class InteractableRedirector : MonoBehaviour, IInteractable
     }
     public void SetInteractable(bool newInteractable) {
         isInteractable = newInteractable;
+        Player.instance.UpdateHandBestInteractables();
     }
     public int GetInteractionPriority() {
         return interactionPriority;
     }
+    
+    public void SelectStart(GameHand hand) { }
+    public void SelectStop(GameHand hand) { }
 
 
 

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1089674369908146603}
   - component: {fileID: 547243393622158582}
   - component: {fileID: 3178796333437171377}
+  - component: {fileID: 6328349859368001820}
   m_Layer: 0
   m_Name: GameHand
   m_TagString: Untagged
@@ -49,6 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isRight: 0
   trueHand: {fileID: 0}
+  state: 0
 --- !u!135 &547243393622158582
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -68,7 +70,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.1
+  m_Radius: 0.065
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!135 &3178796333437171377
 SphereCollider:
@@ -89,8 +91,35 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.03
+  m_Radius: 0.05
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &6328349859368001820
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5963686853482129223}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 2
 --- !u!1001 &2968854440655198333
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -101,15 +130,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1002188743929856192, guid: 95df58c1d9f9e4e40a11dfd6f3bbc622, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.06
+      value: 0.13
       objectReference: {fileID: 0}
     - target: {fileID: 1002188743929856192, guid: 95df58c1d9f9e4e40a11dfd6f3bbc622, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.06
+      value: 0.13
       objectReference: {fileID: 0}
     - target: {fileID: 1002188743929856192, guid: 95df58c1d9f9e4e40a11dfd6f3bbc622, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.06
+      value: 0.13
       objectReference: {fileID: 0}
     - target: {fileID: 1002188743929856192, guid: 95df58c1d9f9e4e40a11dfd6f3bbc622, type: 3}
       propertyPath: m_LocalPosition.x

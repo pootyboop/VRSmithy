@@ -64,6 +64,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c586c06b84e41a47b1d04fc929beda0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isRight: 0
+  gameHand: {fileID: 0}
 --- !u!1001 &3588314667835538595
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -72,6 +74,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4041737941618426027}
     m_Modifications:
+    - target: {fileID: 1002188743929856192, guid: 95df58c1d9f9e4e40a11dfd6f3bbc622, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1002188743929856192, guid: 95df58c1d9f9e4e40a11dfd6f3bbc622, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1002188743929856192, guid: 95df58c1d9f9e4e40a11dfd6f3bbc622, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 1002188743929856192, guid: 95df58c1d9f9e4e40a11dfd6f3bbc622, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

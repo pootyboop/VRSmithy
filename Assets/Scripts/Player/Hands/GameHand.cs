@@ -11,26 +11,36 @@ public enum EGameHandState
 }
 
 [RequireComponent(typeof(SphereCollider))]
+[RequireComponent(typeof(Rigidbody))]
 public class GameHand : HandBase
 {
     //refs
-    [SerializeField] private TrueHand trueHand;
-    private SphereCollider pickupOverlap;
+    public TrueHand trueHand;
+    private SphereCollider rbColl, pickupOverlap;
+    private Rigidbody rb;
 
     //state
-    EGameHandState state = EGameHandState.EMPTY;
-    List<IInteractable> overlappedInteractables = new List<IInteractable>();
-    IInteractable bestInteractable;
-    Grippable grippedObject;
+    [SerializeField] private EGameHandState state = EGameHandState.EMPTY;
+    [SerializeField] private List<IInteractable> overlappedInteractables = new();
+    [SerializeField] private IInteractable bestInteractable, currInteractable;
 
 
 
     void Awake()
     {
-        pickupOverlap = GetComponent<SphereCollider>();
+        SphereCollider[] colls = GetComponents<SphereCollider>();
+        foreach (var coll in colls) {
+            if (coll.isTrigger) {
+                pickupOverlap = coll;
+            } else {
+                rbColl = coll;
+            }
+        }
+        //pickupOverlap = GetComponent<SphereCollider>();
+        //rb = GetComponent<Rigidbody>();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         UpdateMovement();
     }
@@ -52,37 +62,37 @@ public class GameHand : HandBase
         }
     }
 
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.TryGetComponent(out IInteractable temp))
+        if (other.gameObject.TryGetComponent(out IInteractable temp))
         {
             UpdateOverlappedInteractables(temp, true);
         }
     }
 
-    void OnCollisionExit(Collision collision)
+    void OnTriggerExit(Collider other)
     {
-        if (collision.gameObject.TryGetComponent(out IInteractable temp))
+        if (other.gameObject.TryGetComponent(out IInteractable temp))
         {
             UpdateOverlappedInteractables(temp, false);
         }
     }
 
-    void UpdateOverlappedInteractables(IInteractable currInteractable, bool isAdding)
+    void UpdateOverlappedInteractables(IInteractable newInteractable, bool isAdding)
     {
         if (isAdding)
-            overlappedInteractables.Add(currInteractable);
+            overlappedInteractables.Add(newInteractable);
         else
-            overlappedInteractables.Remove(currInteractable);
+            overlappedInteractables.Remove(newInteractable);
 
         UpdateBestInteractable();
     }
 
-    void UpdateBestInteractable()
+    public void UpdateBestInteractable()
     {
-        if (grippedObject != null)
+        if (currInteractable != null || state != EGameHandState.EMPTY)
         {
-            bestInteractable = grippedObject;
+            SetBestInteractable(null);
             return;
         }
 
@@ -101,29 +111,76 @@ public class GameHand : HandBase
                 bestPriority = interactable.GetInteractionPriority();
             }
         }
-        bestInteractable = best;
+
+        SetBestInteractable(best);
+    }
+
+    void SetBestInteractable(IInteractable interactable) {
+        if (bestInteractable == interactable) {
+            return;
+        }
+
+        bestInteractable?.SelectStop(this);
+        bestInteractable = interactable;
+        bestInteractable?.SelectStart(this);
+    }
+
+    public void SetInput(bool newInput)
+    {
+        if (newInput)
+        {
+            if (bestInteractable == null)
+            {
+                return;
+            }
+
+            bestInteractable.InteractStart(this);
+        }
+
+        else
+        {
+            currInteractable?.InteractStop(this);
+        }
     }
 
     public void SetGripping(Grippable grippable, bool shouldGrip)
     {
         if (shouldGrip)
         {
-            grippedObject = grippable;
-            bestInteractable = grippable;
-            state = EGameHandState.GRIPPING;
+            currInteractable = grippable;
 
-            transform.SetParent(grippable.primaryGripTransform, false);
+            if (grippable.GetType() == typeof(Holdable))
+            {
+                state = EGameHandState.HOLDING;
+            }
+            else
+            {
+                state = EGameHandState.GRIPPING;
+            }
+
+            //transform.SetParent(grippable.primaryGripTransform, true);\
+            rbColl.enabled = false;
+            ParentSafely(grippable.primaryGripTransform);
+            transform.position = grippable.primaryGripTransform.position;
+            transform.rotation = grippable.primaryGripTransform.rotation;
+
         }
 
         else
         {
-            if (grippedObject == grippable)
+            if ((object)currInteractable == grippable)
             {
-                grippedObject = null;
+                currInteractable = null;
+
                 state = EGameHandState.EMPTY;
 
                 transform.SetParent(Player.instance.handParent, true);
+                rbColl.enabled = true;
+                RestoreOriginalLocalScale();
             }
         }
+
+        
+        UpdateBestInteractable();
     }
 }
