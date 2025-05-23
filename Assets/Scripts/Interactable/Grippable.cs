@@ -1,21 +1,46 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Collider))]
+public enum EGrippedState
+{
+    UNGRIPPED,
+    ONEHANDED,
+    TWOHANDED
+}
+
 public class Grippable : MonoBehaviour, IInteractable
 {
     //refs
     GameObject previewMesh;
+    Collider coll;
 
     //interaction info
+    [Header("Interaction")]
     [SerializeField] private bool isInteractable = true;
     public int interactionPriority = 1; //0 by default
+    private int defaultLayer;
 
-    //grip transforms
-    public Transform primaryGripTransform, secondaryGripTransform;
+    [Header("Gripping")]
+    public Transform primaryGripTransform;
+    public Transform secondaryGripTransform;
     [HideInInspector] public GameHand primaryGripGameHand, secondaryGripGameHand;
+    [SerializeField] protected EGrippedState grippedState = EGrippedState.UNGRIPPED;
 
-    void Awake()
+    public void Awake()
     {
+        defaultLayer = gameObject.layer;
+
+        if (coll == null)
+        {
+            if (TryGetComponent<Collider>(out var tryColl))
+            {
+                coll = tryColl;
+            }
+            else
+            {
+                Debug.LogWarning("No collider set for Grippable " + this + ". It can't be directly gripped!");
+            }
+        }
+
         if (primaryGripTransform == null)
         {
             primaryGripTransform = transform;
@@ -38,40 +63,82 @@ public class Grippable : MonoBehaviour, IInteractable
     {
         return interactionPriority;
     }
+    public Collider GetCollider()
+    {
+        return coll;
+    }
 
 
 
     public void InteractStart(GameHand hand)
     {
-        this.InteractStartOverrideable(hand);
+        InteractStartOverrideable(hand);
     }
     public void InteractStop(GameHand hand)
     {
-        this.InteractStopOverrideable(hand);
+        InteractStopOverrideable(hand);
     }
-    public virtual void InteractStartOverrideable(GameHand hand) {
+    public virtual void InteractStartOverrideable(GameHand hand)
+    {
         if (!isInteractable)
         {
             return;
         }
-        SetInteractable(false);
+
+        if (grippedState == EGrippedState.UNGRIPPED)
+        {
+            SetSelfAllChildrenLayer(InteractionManager.instance.grippedLayer);
+        }
+
         UpdateGrips(hand, true);
+
+        //if (IsGripGripped(true)) {  SetInteractable(false); }
     }
     public virtual void InteractStopOverrideable(GameHand hand)
     {
         UpdateGrips(hand, false);
+
+        if (grippedState == EGrippedState.UNGRIPPED)
+        {
+            SetSelfAllChildrenLayer(defaultLayer);
+        }
+
         SetInteractable(true);
     }
     public void SelectStart(GameHand hand)
+    {
+        SelectStartOverrideable(hand);
+    }
+    public void SelectStop(GameHand hand)
+    {
+        SelectStopOverrideable(hand);
+    }
+    public virtual void SelectStartOverrideable(GameHand hand)
     {
         if (previewMesh != null)
             Destroy(previewMesh);
         previewMesh = InteractionManager.instance.CreateSelectionPreview(primaryGripTransform);
     }
-    public void SelectStop(GameHand hand)
+    public virtual void SelectStopOverrideable(GameHand hand)
     {
         if (previewMesh != null)
             Destroy(previewMesh);
+    }
+
+
+
+    void SetSelfAllChildrenLayer(int layer)
+    {
+        SetSelfAndDescendantsLayer(gameObject, layer);
+    }
+    void SetSelfAndDescendantsLayer(GameObject unc, int layer)
+    {
+        unc.layer = layer;
+
+        foreach (Transform jit in unc.transform)
+        {
+            SetSelfAndDescendantsLayer(jit.gameObject, layer);
+        }
     }
 
 
@@ -142,6 +209,8 @@ public class Grippable : MonoBehaviour, IInteractable
                 primaryGripGameHand = null;
             }
         }
+
+        UpdateIsCurrentlyGripped();
     }
 
     public bool IsGripGripped(bool isSecondary)
@@ -162,5 +231,28 @@ public class Grippable : MonoBehaviour, IInteractable
     public bool IsGrippedAtAll()
     {
         return primaryGripGameHand != null || secondaryGripGameHand != null;
+    }
+
+    public EGrippedState UpdateIsCurrentlyGripped()
+    {
+        if (IsGripGripped(false))
+        {
+            if (IsGripGripped(true))
+            {
+                grippedState = EGrippedState.TWOHANDED;
+            }
+
+            else
+            {
+                grippedState = EGrippedState.ONEHANDED;
+            }
+        }
+
+        else
+        {
+            grippedState = EGrippedState.UNGRIPPED;
+        }
+
+        return grippedState;
     }
 }

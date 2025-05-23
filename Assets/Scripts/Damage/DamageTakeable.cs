@@ -26,17 +26,21 @@ public enum EDamageability
 public class DamageTakeable : MonoBehaviour, IDamageable
 {
     //refs
-    public DamageTakeable owningDamageTakeable; //optional. damage dealt to this object gets dealt to this reference too. avoid infinite loops!
     IEnumerator effectsCoroutine;
 
-    //vals
+    [Header("Health")]
     [Min(0)] public float maxHealth = 1f;    //max health, and what this object's health will start at
+    [SerializeField] float health;   //current health
+
+    [Header("Taking Damage")]
     public EDamageability damageability = EDamageability.DAMAGEABLE_NUMBERS;
     public DamageResistance resistance = new();
+    [Tooltip("Damage dealt to this object gets passed along and dealt to owningDamageTakeable too. Avoid infinite loops!")]
+    public DamageTakeable owningDamageTakeable;
+    [Tooltip("Defines damage threshholds at which functions get called.")]
     [SerializeField] DamageThreshhold[] threshholds;
 
     //state
-    float health;   //current health
     List<DamageEffect> activeEffects = new();
 
     void Awake()
@@ -56,6 +60,11 @@ public class DamageTakeable : MonoBehaviour, IDamageable
 
     public void Damage(Damage damage)
     {
+        //hit itself
+        if (gameObject == damage.dealer.gameObject || gameObject == damage.literalDealer) {
+            return;
+        }
+        print(damage.dealer + " hits " + this + " for " + damage.damageAmount);
 
         foreach (var threshhold in threshholds)
         {
@@ -170,14 +179,15 @@ public class DamageTakeable : MonoBehaviour, IDamageable
 [Serializable]
 public class DamageThreshhold
 {
-    [Min(0.001f)] [Tooltip("The amount of damage required to cross the threshhold")]
+    [Min(0.001f)]
+    [Tooltip("The amount of damage required to cross the threshhold")]
     public float damageThreshhold = 1f;
     float damageTaken = 0f;
-     [Tooltip("Physical damage types that this threshhold will accept and take damage from.")]
+    [Tooltip("Physical damage types that this threshhold will accept and take damage from.")]
     public EPhysicalDamageType[] applicableDamageTypes;
-     [Tooltip("Damage effect types that this threshhold will accept and take damage from.")]
+    [Tooltip("Damage effect types that this threshhold will accept and take damage from.")]
     public EDamageEffectType[] applicableEffectTypes;
-     [Tooltip("Amount of times this threshhold can be reused (resetting after each threshhold is crossed). Set to -1 for infinite uses.")]
+    [Tooltip("Amount of times this threshhold can be reused (resetting after each threshhold is crossed). Set to -1 for infinite uses.")]
     [Min(1)] public int usesBeforeExpiry = 1;
     public UnityEvent onThreshholdCrossed;
 
@@ -211,7 +221,8 @@ public class DamageThreshhold
         }
     }
 
-    bool IsThreshholdTracking() {
+    bool IsThreshholdTracking()
+    {
         return usesBeforeExpiry > 0 || usesBeforeExpiry == -1;
     }
 

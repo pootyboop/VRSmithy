@@ -20,19 +20,23 @@ public class GameHand : HandBase
     private Rigidbody rb;
 
     //state
-    [SerializeField] private EGameHandState state = EGameHandState.EMPTY;
-    [SerializeField] private List<IInteractable> overlappedInteractables = new();
-    [SerializeField] private IInteractable bestInteractable, currInteractable;
+    private EGameHandState state = EGameHandState.EMPTY;
+    private List<IInteractable> overlappedInteractables = new();
+    private IInteractable bestInteractable, currInteractable;
 
 
 
     void Awake()
     {
         SphereCollider[] colls = GetComponents<SphereCollider>();
-        foreach (var coll in colls) {
-            if (coll.isTrigger) {
+        foreach (var coll in colls)
+        {
+            if (coll.isTrigger)
+            {
                 pickupOverlap = coll;
-            } else {
+            }
+            else
+            {
                 rbColl = coll;
             }
         }
@@ -53,6 +57,7 @@ public class GameHand : HandBase
             case EGameHandState.EMPTY:
                 //stick to TrueHand position - no limitation
                 transform.position = trueHand.transform.position;
+                transform.rotation = trueHand.transform.rotation;
                 return;
 
             case EGameHandState.HOLDING:
@@ -115,8 +120,10 @@ public class GameHand : HandBase
         SetBestInteractable(best);
     }
 
-    void SetBestInteractable(IInteractable interactable) {
-        if (bestInteractable == interactable) {
+    void SetBestInteractable(IInteractable interactable)
+    {
+        if (bestInteractable == interactable)
+        {
             return;
         }
 
@@ -143,11 +150,12 @@ public class GameHand : HandBase
         }
     }
 
-    public void SetGripping(Grippable grippable, bool shouldGrip)
+    public void SetGripping(Grippable grippable, bool newGripping)
     {
-        if (shouldGrip)
+        if (newGripping)
         {
             currInteractable = grippable;
+            //Player.instance.SetIgnoreCollider(grippable.GetCollider(), true);
 
             if (grippable.GetType() == typeof(Holdable))
             {
@@ -158,12 +166,19 @@ public class GameHand : HandBase
                 state = EGameHandState.GRIPPING;
             }
 
-            //transform.SetParent(grippable.primaryGripTransform, true);\
+            //transform.SetParent(grippable.primaryGripTransform, true);
             rbColl.enabled = false;
-            ParentSafely(grippable.primaryGripTransform);
-            transform.position = grippable.primaryGripTransform.position;
-            transform.rotation = grippable.primaryGripTransform.rotation;
-
+            if (!grippable.IsGripGripped(false))
+            {
+                ParentSafely(grippable.primaryGripTransform);
+                transform.SetPositionAndRotation(grippable.primaryGripTransform.position, grippable.primaryGripTransform.rotation);
+            }
+            
+            else
+            {
+                ParentSafely(grippable.secondaryGripTransform);
+                transform.SetPositionAndRotation(grippable.secondaryGripTransform.position, grippable.secondaryGripTransform.rotation);
+            }
         }
 
         else
@@ -171,6 +186,7 @@ public class GameHand : HandBase
             if ((object)currInteractable == grippable)
             {
                 currInteractable = null;
+                //Player.instance.SetIgnoreCollider(grippable.GetCollider(), false);
 
                 state = EGameHandState.EMPTY;
 
@@ -180,7 +196,12 @@ public class GameHand : HandBase
             }
         }
 
-        
+
         UpdateBestInteractable();
+    }
+
+    public Transform GetTrueHandTransform()
+    {
+        return trueHand.transform;
     }
 }

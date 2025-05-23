@@ -49,7 +49,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""name"": ""Is Tracked"",
                     ""type"": ""Button"",
                     ""id"": ""6bb4e248-e42b-47c3-b66c-79566508ca74"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -85,7 +85,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""name"": ""Eye Gaze Is Tracked"",
                     ""type"": ""Button"",
                     ""id"": ""ea26ba43-844b-4585-817a-2f124b571813"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -984,7 +984,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""name"": ""Scale Toggle"",
                     ""type"": ""Button"",
                     ""id"": ""80ed7d74-56de-473c-bf76-da3bdd16b562"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -1048,6 +1048,17 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""name"": """",
                     ""id"": ""ebab6345-d4f7-4a42-94b3-12d4464de218"",
                     ""path"": ""<HoloLensHand>{LeftHand}/squeezePressed"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""839bec92-4421-4abd-bb60-e10a88be4a9d"",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1391,6 +1402,61 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""9c3673d1-88e5-4fd1-ad88-20689a25e393"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""7dbe112e-cc3d-456a-9279-c6ce87452778"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""73cd2762-a576-49d7-993b-724943f662b7"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""ade9f0dd-d534-429f-8a41-67c4b68bab07"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""cebb81c3-0bc8-4029-a6ea-0ced22dba39b"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": """",
@@ -2119,6 +2185,17 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""name"": """",
                     ""id"": ""82f232f1-6246-4d1e-aacc-a7ccc16c76d9"",
                     ""path"": ""<HoloLensHand>{RightHand}/squeezePressed"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""68738c0e-a977-4871-9b36-4628f7c9c181"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -3335,6 +3412,135 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""isPartOfComposite"": true
                 }
             ]
+        },
+        {
+            ""name"": ""Generic"",
+            ""id"": ""09aabf65-2f9b-486e-b01c-f8db7cc33e60"",
+            ""actions"": [
+                {
+                    ""name"": ""MouseRotation"",
+                    ""type"": ""Value"",
+                    ""id"": ""891a28d5-c730-429c-bf20-efedab6b5600"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""9f9c8f81-801d-4028-9abf-6f6a8af9e0d3"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Dodge"",
+                    ""type"": ""Button"",
+                    ""id"": ""74bcf1b6-a03c-41a5-97ee-5112f2cf78a7"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""bddc43d5-7f70-452d-97b8-f81e5c90d759"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseRotation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2ea087f8-9581-48d4-8cf2-728ba613b350"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1bfd6ec0-364c-4e77-a2ad-b02af4d75cea"",
+                    ""path"": ""<QuestTouchPlusController>{LeftHand}/primaryButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e44ec76f-50b8-4e66-a2db-501ab33c3d23"",
+                    ""path"": ""<QuestProTouchController>/primaryButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""190d7fd4-b793-4746-8b2c-45422a80ebdd"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dodge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8a4163f0-ffec-48ab-9acd-d43c234792ea"",
+                    ""path"": ""<OculusTouchController>{LeftHand}/thumbstickClicked"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dodge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Editor"",
+            ""id"": ""06a3efe2-56b2-4f6f-a8fe-9c182ea6067e"",
+            ""actions"": [
+                {
+                    ""name"": ""HandsToCam"",
+                    ""type"": ""Button"",
+                    ""id"": ""97493293-3cad-41e0-bdd8-7dafc96565bc"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""4308c01e-bd07-47f0-96ae-b260b9972131"",
+                    ""path"": ""<Keyboard>/h"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HandsToCam"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -3447,6 +3653,14 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         m_TouchscreenGestures_TwistDeltaRotation = m_TouchscreenGestures.FindAction("Twist Delta Rotation", throwIfNotFound: true);
         m_TouchscreenGestures_ScreenTouchCount = m_TouchscreenGestures.FindAction("Screen Touch Count", throwIfNotFound: true);
         m_TouchscreenGestures_SpawnObject = m_TouchscreenGestures.FindAction("Spawn Object", throwIfNotFound: true);
+        // Generic
+        m_Generic = asset.FindActionMap("Generic", throwIfNotFound: true);
+        m_Generic_MouseRotation = m_Generic.FindAction("MouseRotation", throwIfNotFound: true);
+        m_Generic_Jump = m_Generic.FindAction("Jump", throwIfNotFound: true);
+        m_Generic_Dodge = m_Generic.FindAction("Dodge", throwIfNotFound: true);
+        // Editor
+        m_Editor = asset.FindActionMap("Editor", throwIfNotFound: true);
+        m_Editor_HandsToCam = m_Editor.FindAction("HandsToCam", throwIfNotFound: true);
     }
 
     ~@XRIDefaultInputActions()
@@ -3460,6 +3674,8 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         UnityEngine.Debug.Assert(!m_XRIRightLocomotion.enabled, "This will cause a leak and performance issues, XRIDefaultInputActions.XRIRightLocomotion.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_XRIUI.enabled, "This will cause a leak and performance issues, XRIDefaultInputActions.XRIUI.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_TouchscreenGestures.enabled, "This will cause a leak and performance issues, XRIDefaultInputActions.TouchscreenGestures.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Generic.enabled, "This will cause a leak and performance issues, XRIDefaultInputActions.Generic.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Editor.enabled, "This will cause a leak and performance issues, XRIDefaultInputActions.Editor.Disable() has not been called.");
     }
 
     public void Dispose()
@@ -4579,6 +4795,114 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         }
     }
     public TouchscreenGesturesActions @TouchscreenGestures => new TouchscreenGesturesActions(this);
+
+    // Generic
+    private readonly InputActionMap m_Generic;
+    private List<IGenericActions> m_GenericActionsCallbackInterfaces = new List<IGenericActions>();
+    private readonly InputAction m_Generic_MouseRotation;
+    private readonly InputAction m_Generic_Jump;
+    private readonly InputAction m_Generic_Dodge;
+    public struct GenericActions
+    {
+        private @XRIDefaultInputActions m_Wrapper;
+        public GenericActions(@XRIDefaultInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @MouseRotation => m_Wrapper.m_Generic_MouseRotation;
+        public InputAction @Jump => m_Wrapper.m_Generic_Jump;
+        public InputAction @Dodge => m_Wrapper.m_Generic_Dodge;
+        public InputActionMap Get() { return m_Wrapper.m_Generic; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(GenericActions set) { return set.Get(); }
+        public void AddCallbacks(IGenericActions instance)
+        {
+            if (instance == null || m_Wrapper.m_GenericActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_GenericActionsCallbackInterfaces.Add(instance);
+            @MouseRotation.started += instance.OnMouseRotation;
+            @MouseRotation.performed += instance.OnMouseRotation;
+            @MouseRotation.canceled += instance.OnMouseRotation;
+            @Jump.started += instance.OnJump;
+            @Jump.performed += instance.OnJump;
+            @Jump.canceled += instance.OnJump;
+            @Dodge.started += instance.OnDodge;
+            @Dodge.performed += instance.OnDodge;
+            @Dodge.canceled += instance.OnDodge;
+        }
+
+        private void UnregisterCallbacks(IGenericActions instance)
+        {
+            @MouseRotation.started -= instance.OnMouseRotation;
+            @MouseRotation.performed -= instance.OnMouseRotation;
+            @MouseRotation.canceled -= instance.OnMouseRotation;
+            @Jump.started -= instance.OnJump;
+            @Jump.performed -= instance.OnJump;
+            @Jump.canceled -= instance.OnJump;
+            @Dodge.started -= instance.OnDodge;
+            @Dodge.performed -= instance.OnDodge;
+            @Dodge.canceled -= instance.OnDodge;
+        }
+
+        public void RemoveCallbacks(IGenericActions instance)
+        {
+            if (m_Wrapper.m_GenericActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IGenericActions instance)
+        {
+            foreach (var item in m_Wrapper.m_GenericActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_GenericActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public GenericActions @Generic => new GenericActions(this);
+
+    // Editor
+    private readonly InputActionMap m_Editor;
+    private List<IEditorActions> m_EditorActionsCallbackInterfaces = new List<IEditorActions>();
+    private readonly InputAction m_Editor_HandsToCam;
+    public struct EditorActions
+    {
+        private @XRIDefaultInputActions m_Wrapper;
+        public EditorActions(@XRIDefaultInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @HandsToCam => m_Wrapper.m_Editor_HandsToCam;
+        public InputActionMap Get() { return m_Wrapper.m_Editor; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(EditorActions set) { return set.Get(); }
+        public void AddCallbacks(IEditorActions instance)
+        {
+            if (instance == null || m_Wrapper.m_EditorActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_EditorActionsCallbackInterfaces.Add(instance);
+            @HandsToCam.started += instance.OnHandsToCam;
+            @HandsToCam.performed += instance.OnHandsToCam;
+            @HandsToCam.canceled += instance.OnHandsToCam;
+        }
+
+        private void UnregisterCallbacks(IEditorActions instance)
+        {
+            @HandsToCam.started -= instance.OnHandsToCam;
+            @HandsToCam.performed -= instance.OnHandsToCam;
+            @HandsToCam.canceled -= instance.OnHandsToCam;
+        }
+
+        public void RemoveCallbacks(IEditorActions instance)
+        {
+            if (m_Wrapper.m_EditorActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IEditorActions instance)
+        {
+            foreach (var item in m_Wrapper.m_EditorActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_EditorActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public EditorActions @Editor => new EditorActions(this);
     public interface IXRIHeadActions
     {
         void OnPosition(InputAction.CallbackContext context);
@@ -4695,5 +5019,15 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         void OnTwistDeltaRotation(InputAction.CallbackContext context);
         void OnScreenTouchCount(InputAction.CallbackContext context);
         void OnSpawnObject(InputAction.CallbackContext context);
+    }
+    public interface IGenericActions
+    {
+        void OnMouseRotation(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
+        void OnDodge(InputAction.CallbackContext context);
+    }
+    public interface IEditorActions
+    {
+        void OnHandsToCam(InputAction.CallbackContext context);
     }
 }

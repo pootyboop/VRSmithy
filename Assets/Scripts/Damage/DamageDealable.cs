@@ -14,7 +14,7 @@ public class DamageDealable : MonoBehaviour
         coll = GetComponent<Collider>();
     }
 
-    void OnCollisionEnter(Collision collision)
+    public void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.TryGetComponent(out IDamageable hitDamageable))
         {
@@ -66,7 +66,8 @@ public class DamageDealable : MonoBehaviour
         float raw = damageStats.physical.rawDamage;
         float sharpness = Mathf.Abs(damageStats.physical.sharpness) * 0.2f;
 
-        return (raw + sharpness) * force;
+        float dealtDamage = (raw + sharpness) * force;
+        return dealtDamage;
 
     }
 }

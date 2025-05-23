@@ -8,6 +8,7 @@ public class DamageNumber : MonoBehaviour
     [SerializeField] TMP_Text text;
     [SerializeField] Gradient colorByDamage;
     [SerializeField] float lifetime = 2f, fadeFromTime = 1.5f;
+    [SerializeField] float moveUpSpeed = 0.1f;
     float time = 0f;
     float fadeTotalTime;
 
@@ -40,6 +41,7 @@ public class DamageNumber : MonoBehaviour
 
     void Update()
     {
+        transform.position = new Vector3 (transform.position.x, transform.position.y + moveUpSpeed * Time.deltaTime, transform.position.z);
         transform.LookAt(Player.instance.cam.transform);
 
         time += Time.deltaTime;

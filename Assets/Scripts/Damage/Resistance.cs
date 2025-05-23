@@ -31,7 +31,7 @@ public class DamageResistance
 
         resDamage.stats.effects = resEffects.ToArray();
 
-        float efficacy = physicalRes;
+        float efficacy = physicalRes - 1f;
         DamageManager.instance.SpawnDamageNumber(resDamage, efficacy);
 
         return resDamage;
@@ -47,7 +47,7 @@ public class DamageResistance
             }
         }
 
-        return 0f;
+        return 1.5f;
     }
 
     DamageEffect ApplyResistanceToEffect(DamageEffect effect)

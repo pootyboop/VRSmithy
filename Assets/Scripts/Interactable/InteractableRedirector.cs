@@ -38,7 +38,9 @@ public class InteractableRedirector : MonoBehaviour, IInteractable
     public int GetInteractionPriority() {
         return interactionPriority;
     }
-    
+    public Collider GetCollider() {
+        return null;
+    }
     public void SelectStart(GameHand hand) { }
     public void SelectStop(GameHand hand) { }
 

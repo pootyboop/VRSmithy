@@ -14,15 +14,18 @@ public enum EStowableState {
 
 public class Item : Holdable
 {
-    public string name = "Item";
+    
+    [Header("Item Data")]
+    public new string name = "Item";
     public EItemCategory itemCategory = EItemCategory.Miscellaneous;
     public string description = "An overview of the item's function/uses and how it was obtained.";
     public float baseValue = 1f;
     private float totalValue;
     public EStowableState stowable = EStowableState.INVENTORY;
 
-    void Awake()
+    public void Awake()
     {
+        base.Awake();
         CalculateTotalValue();
     }
 

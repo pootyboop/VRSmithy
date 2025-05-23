@@ -14,6 +14,7 @@ public class HandBase : MonoBehaviour
     public void ParentSafely(Transform parent) {
         transform.parent = null;
         transform.localScale = Vector3.one;
+        transform.rotation = Quaternion.Euler(Vector3.zero);
         transform.parent = parent.transform;
     }
 
