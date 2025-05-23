@@ -33,9 +33,11 @@ public class DamageDealable : MonoBehaviour
 
     Damage SolveDealtDamage(Collision collision, IDamageable hitDamageable)
     {
-        Damage intendedDamage = new();
-
-        intendedDamage.stats = damageStats;
+        Damage intendedDamage = new()
+        {
+            stats = damageStats
+        };
+        
         if (owner == null)
         {
             owner = this;
@@ -51,12 +53,17 @@ public class DamageDealable : MonoBehaviour
 
 
 
-        Damage finalDamage = hitDamageable.GetDamageResistance().ApplyResistanceToDamage(intendedDamage);
+        Damage finalDamage = hitDamageable.GetDamageResistance().ApplyResistanceToDamage(intendedDamage, out float efficacy);
 
         if (finalDamage.damageAmount <= 0f)
         {
             finalDamage.damageAmount = 0f;
         }
+
+        // Round to nearest single decimal place
+        finalDamage.damageAmount = (float)(Mathf.Round(finalDamage.damageAmount * 10) / 10.0);
+
+        DamageManager.instance.SpawnDamageNumber(finalDamage, efficacy);
 
         return finalDamage;
     }

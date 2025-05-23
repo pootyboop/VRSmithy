@@ -12,7 +12,7 @@ public class DamageResistance
     [Range(0f, 1f)] public float toughness = 0.5f;    //resistance to sharpness. directly correlates to physical damage sharpness from 0 to 1
     [Range(0f, 1f)] public float stability = 0.5f;  //resistance multiplier to knockback from 0 to 1
 
-    public Damage ApplyResistanceToDamage(Damage damage)
+    public Damage ApplyResistanceToDamage(Damage damage, out float efficacy)
     {
         Damage resDamage = damage;
         float physicalRes = GetPhysicalResistance(damage.stats.physical.type);
@@ -31,8 +31,7 @@ public class DamageResistance
 
         resDamage.stats.effects = resEffects.ToArray();
 
-        float efficacy = physicalRes - 1f;
-        DamageManager.instance.SpawnDamageNumber(resDamage, efficacy);
+        efficacy = physicalRes - 1f;
 
         return resDamage;
     }
