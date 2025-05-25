@@ -8,6 +8,7 @@ using UnityEngine.InputSystem.XR;
 public enum EPlayerMovementMode
 {
     DEFAULT,
+    CROUCH,
     DODGE
 }
 
@@ -25,7 +26,7 @@ public class Player : MonoBehaviour
     IEnumerator dodgeTimer, rotateCooldown;
 
     [Header("References")]
-    public Transform handParent;
+    public Transform handCamParent;
     public Camera cam;
     public TrueHand lTrueHand, rTrueHand;
     public GameHand lGameHand, rGameHand;
@@ -37,6 +38,7 @@ public class Player : MonoBehaviour
     [SerializeField] private bool handsTrackConsistently = false;
     private bool areDesktopHandsTracking = false;
     [SerializeField] private float mouseSensitivity = 0.03f;
+    private float desktopCameraHeight;
 
     EPlayerMovementMode movementMode = EPlayerMovementMode.DEFAULT;
     private Vector2 movementInput = Vector2.zero, rotationInput = Vector2.zero;
@@ -51,6 +53,7 @@ public class Player : MonoBehaviour
     [SerializeField] float dodgeDuration = 0.25f;
     [SerializeField] float dodgeCooldownTime = 2f;
     [SerializeField] float dodgeCooldownMovementSpeedPenalty = 0.5f;
+    [SerializeField] float crouchMovementSpeedPenalty = 0.5f;
     [SerializeField] float rotateDegrees = 45f;
     [SerializeField] float rotateCooldownTime = 0.4f;
 
@@ -61,7 +64,9 @@ public class Player : MonoBehaviour
         instance = this;
         rb = GetComponent<Rigidbody>();
         coll = GetComponent<CapsuleCollider>();
+        desktopCameraHeight = handCamParent.position.y;
         UpdateDeviceMode();
+        SetMovementMode(movementMode);
     }
 
     void UpdateDeviceMode()
@@ -147,12 +152,16 @@ public class Player : MonoBehaviour
         {
             controls.Generic.MouseRotation.performed -= ReceiveMouseInput;
             controls.Editor.HandsToCam.performed -= ctx => DesktopHandsButtonHit();
+            controls.Editor.Crouch.started -= ctx => SetCrouching(true);
+            controls.Editor.Crouch.canceled -= ctx => SetCrouching(false);
         }
 
         else
         {
             controls.Generic.MouseRotation.performed += ReceiveMouseInput;
             controls.Editor.HandsToCam.performed += ctx => DesktopHandsButtonHit();
+            controls.Editor.Crouch.started += ctx => SetCrouching(true);
+            controls.Editor.Crouch.canceled += ctx => SetCrouching(false);
         }
     }
 
@@ -181,6 +190,25 @@ public class Player : MonoBehaviour
         {
             DesktopHandsToCamera();
         }
+    }
+
+    void SetCrouching(bool newCrouching)
+    {
+        SetMovementMode(newCrouching ? EPlayerMovementMode.CROUCH : EPlayerMovementMode.DEFAULT);
+    }
+
+    void UpdateCrouchDesktop()
+    {
+        if (isVRMode)
+        {
+            return;
+        }
+
+        handCamParent.position = new Vector3(
+            handCamParent.position.x,
+            movementMode == EPlayerMovementMode.CROUCH ? 0.1f : desktopCameraHeight,
+            handCamParent.position.z
+        );
     }
 
     void Jump(InputAction.CallbackContext ctx)
@@ -213,16 +241,12 @@ public class Player : MonoBehaviour
     IEnumerator DodgeTimer()
     {
         //dodge start
-        movementMode = EPlayerMovementMode.DODGE;
+        SetMovementMode(EPlayerMovementMode.DODGE);
 
         yield return new WaitForSeconds(dodgeDuration);
 
         //dodge end, cooldown start
-        movementMode = EPlayerMovementMode.DEFAULT;
-        rb.linearVelocity = new Vector3(0f, rb.linearVelocity.y, 0f);
-        dodgeInput = Vector2.zero;
-        print("test");
-
+        SetMovementMode(EPlayerMovementMode.DEFAULT);
         yield return new WaitForSeconds(dodgeCooldownTime);
 
         //cooldown end
@@ -237,6 +261,7 @@ public class Player : MonoBehaviour
         {
             default:
             case EPlayerMovementMode.DEFAULT:
+            case EPlayerMovementMode.CROUCH:
                 if (movementInput != Vector2.zero && rb.linearVelocity.magnitude < maxSpeed)
                 {
                     rb.AddForce(GetDesiredMovement(time));
@@ -267,6 +292,11 @@ public class Player : MonoBehaviour
             movementVector *= dodgeCooldownMovementSpeedPenalty;
         }
 
+        if (movementMode == EPlayerMovementMode.CROUCH)
+        {
+            movementVector *= crouchMovementSpeedPenalty;
+        }
+
         return movementVector;
     }
 
@@ -294,6 +324,31 @@ public class Player : MonoBehaviour
     private void ReceiveMovementInput(InputAction.CallbackContext ctx)
     {
         movementInput = ctx.action.ReadValue<Vector2>();
+    }
+
+    public void SetMovementMode(EPlayerMovementMode newMode)
+    {
+        switch (movementMode)
+        {
+            case EPlayerMovementMode.DODGE:
+                rb.linearVelocity = new Vector3(0f, rb.linearVelocity.y, 0f);
+                dodgeInput = Vector2.zero;
+                break;
+            default:
+                break;
+        }
+
+        movementMode = newMode;
+
+        switch (movementMode)
+        {
+            case EPlayerMovementMode.DODGE:
+                break;
+            default:
+                break;
+        }
+
+        UpdateCrouchDesktop();
     }
 
     private void ReceiveRotationInput(InputAction.CallbackContext ctx)

@@ -3526,6 +3526,15 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Crouch"",
+                    ""type"": ""Button"",
+                    ""id"": ""b8c100d2-02b5-4ef4-9281-34ce30675450"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -3537,6 +3546,17 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""HandsToCam"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9c761ddc-7048-4f67-bc7f-24a37b5c06a0"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Crouch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -3661,6 +3681,7 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
         // Editor
         m_Editor = asset.FindActionMap("Editor", throwIfNotFound: true);
         m_Editor_HandsToCam = m_Editor.FindAction("HandsToCam", throwIfNotFound: true);
+        m_Editor_Crouch = m_Editor.FindAction("Crouch", throwIfNotFound: true);
     }
 
     ~@XRIDefaultInputActions()
@@ -4862,11 +4883,13 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
     private readonly InputActionMap m_Editor;
     private List<IEditorActions> m_EditorActionsCallbackInterfaces = new List<IEditorActions>();
     private readonly InputAction m_Editor_HandsToCam;
+    private readonly InputAction m_Editor_Crouch;
     public struct EditorActions
     {
         private @XRIDefaultInputActions m_Wrapper;
         public EditorActions(@XRIDefaultInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @HandsToCam => m_Wrapper.m_Editor_HandsToCam;
+        public InputAction @Crouch => m_Wrapper.m_Editor_Crouch;
         public InputActionMap Get() { return m_Wrapper.m_Editor; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -4879,6 +4902,9 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
             @HandsToCam.started += instance.OnHandsToCam;
             @HandsToCam.performed += instance.OnHandsToCam;
             @HandsToCam.canceled += instance.OnHandsToCam;
+            @Crouch.started += instance.OnCrouch;
+            @Crouch.performed += instance.OnCrouch;
+            @Crouch.canceled += instance.OnCrouch;
         }
 
         private void UnregisterCallbacks(IEditorActions instance)
@@ -4886,6 +4912,9 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
             @HandsToCam.started -= instance.OnHandsToCam;
             @HandsToCam.performed -= instance.OnHandsToCam;
             @HandsToCam.canceled -= instance.OnHandsToCam;
+            @Crouch.started -= instance.OnCrouch;
+            @Crouch.performed -= instance.OnCrouch;
+            @Crouch.canceled -= instance.OnCrouch;
         }
 
         public void RemoveCallbacks(IEditorActions instance)
@@ -5029,5 +5058,6 @@ public partial class @XRIDefaultInputActions: IInputActionCollection2, IDisposab
     public interface IEditorActions
     {
         void OnHandsToCam(InputAction.CallbackContext context);
+        void OnCrouch(InputAction.CallbackContext context);
     }
 }

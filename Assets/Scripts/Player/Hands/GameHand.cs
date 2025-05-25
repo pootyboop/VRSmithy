@@ -190,7 +190,7 @@ public class GameHand : HandBase
 
                 state = EGameHandState.EMPTY;
 
-                transform.SetParent(Player.instance.handParent, true);
+                transform.SetParent(Player.instance.handCamParent, true);
                 rbColl.enabled = true;
                 RestoreOriginalLocalScale();
             }

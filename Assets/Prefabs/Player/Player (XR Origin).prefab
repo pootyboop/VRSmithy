@@ -266,7 +266,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6b101c502c1a9548b7019fc5e703d99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  handParent: {fileID: 9181975883432927183}
+  handCamParent: {fileID: 9181975883432927183}
   cam: {fileID: 5434101436451691693}
   lTrueHand: {fileID: 4635640165586263850}
   rTrueHand: {fileID: 4168629215804472107}
@@ -274,12 +274,19 @@ MonoBehaviour:
   rGameHand: {fileID: 3536422851744311841}
   lDesktopHandPos: {fileID: 1141054049473161635}
   rDesktopHandPos: {fileID: 6158300464315435225}
-  isVRMode: 1
+  isVRMode: 0
   handsTrackConsistently: 1
   mouseSensitivity: 0.05
   acceleration: 10
   maxSpeed: 3
   jumpStrength: 200
+  dodgeStrength: 30
+  dodgeDuration: 0.15
+  dodgeCooldownTime: 1.25
+  dodgeCooldownMovementSpeedPenalty: 0.75
+  crouchMovementSpeedPenalty: 0.5
+  rotateDegrees: 45
+  rotateCooldownTime: 0.4
 --- !u!54 &2649885718689189821
 Rigidbody:
   m_ObjectHideFlags: 0

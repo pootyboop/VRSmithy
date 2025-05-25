@@ -210,7 +210,7 @@ public class Grippable : MonoBehaviour, IInteractable
             }
         }
 
-        UpdateIsCurrentlyGripped();
+        UpdateGrippedState();
     }
 
     public bool IsGripGripped(bool isSecondary)
@@ -233,7 +233,7 @@ public class Grippable : MonoBehaviour, IInteractable
         return primaryGripGameHand != null || secondaryGripGameHand != null;
     }
 
-    public EGrippedState UpdateIsCurrentlyGripped()
+    public EGrippedState UpdateGrippedState()
     {
         if (IsGripGripped(false))
         {

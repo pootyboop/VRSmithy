@@ -30,8 +30,8 @@ public class Handling
     */
 
     // === Parameters ===
-    public float positionResponsiveness = 20f;     // Linear snap speed
-    public float rotationResponsiveness = 15f;     // Angular snap speed
+    public float positionResponsiveness = 30f;     // Linear snap speed
+    public float rotationResponsiveness = 100f;     // Angular snap speed
     public float positionResponsivenessCurvePower = 1f;
     public float rotationResponsivenessCurvePower = 1f;
     public float maxLinearSpeed = 1000f;             // Clamp linear velocity
@@ -63,8 +63,9 @@ public class Holdable : Grippable
     [SerializeField] bool positionTracking = true;
     [SerializeField] bool rotationTracking = true;
 
-    //un-gripped state
+    //un-gripped rb state
     private bool isKinematic, useGravity;
+    private RigidbodyInterpolation interpolation;
 
     void Reset()
     {
@@ -91,10 +92,16 @@ public class Holdable : Grippable
     public void SetRB(Rigidbody newRb)
     {
         rb = newRb;
+        UpdateRBDefaults();
+    }
+
+    public void UpdateRBDefaults()
+    {
         if (rb != null)
         {
             isKinematic = rb.isKinematic;
             useGravity = rb.useGravity;
+            interpolation = rb.interpolation;
         }
     }
 
@@ -125,6 +132,8 @@ public class Holdable : Grippable
         {
             rb.isKinematic = false;
             rb.useGravity = false;
+            rb.interpolation = RigidbodyInterpolation.Interpolate;
+
             rb.linearVelocity = Vector3.zero;
         }
     }
@@ -138,6 +147,7 @@ public class Holdable : Grippable
         {
             rb.isKinematic = isKinematic;
             rb.useGravity = useGravity;
+            rb.interpolation = interpolation;
         }
     }
 
@@ -201,6 +211,20 @@ public class Holdable : Grippable
     {
         targetPosition = t.position;
         targetRotation = t.rotation;
+    }
+
+    public void DetachFromParent()
+    {
+        transform.SetParent(null, true);
+        SetInteractable(true);
+        rb.isKinematic = false;
+        rb.useGravity = true;
+        UpdateRBDefaults();
+
+        if (TryGetComponent(out DamageTakeable damageTakeable))
+        {
+            Destroy(damageTakeable);
+        }
     }
 
 

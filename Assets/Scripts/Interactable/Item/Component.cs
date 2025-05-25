@@ -72,8 +72,7 @@ public class Component : Item
     {
         if (implement == null)
         {
-            Implement newImplement = transform.parent.GetComponent<Implement>();
-            if (newImplement != null)
+            if (transform.parent.TryGetComponent<Implement>(out var newImplement))
             {
                 SetImplement(newImplement);
             }

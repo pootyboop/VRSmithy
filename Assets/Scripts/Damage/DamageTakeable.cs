@@ -36,7 +36,7 @@ public class DamageTakeable : MonoBehaviour, IDamageable
     public EDamageability damageability = EDamageability.DAMAGEABLE_NUMBERS;
     public DamageResistance resistance = new();
     [Tooltip("Damage dealt to this object gets passed along and dealt to owningDamageTakeable too. Avoid infinite loops!")]
-    public DamageTakeable owningDamageTakeable;
+    public DamageTakeable owner;
     [Tooltip("Defines damage threshholds at which functions get called.")]
     [SerializeField] DamageThreshhold[] threshholds;
 
@@ -71,9 +71,9 @@ public class DamageTakeable : MonoBehaviour, IDamageable
             threshhold.TryApplyDamage(damage);
         }
 
-        if (owningDamageTakeable != null)
+        if (owner != null)
         {
-            owningDamageTakeable.Damage(damage);
+            owner.Damage(damage);
         }
 
         if (IsDamageable())
@@ -228,6 +228,17 @@ public class DamageThreshhold
 
     bool IsDamageApplicable(Damage damage)
     {
+        // If no applicable damage types are set, assume any damage is fine
+        if (applicableDamageTypes.Length == 0)
+        {
+            return true;
+        }
+        // If only unset damage type is allowed, assume any damage is fine
+        if (applicableDamageTypes.Contains(EPhysicalDamageType.UNSET))
+        {
+            return true;
+        }
+
         if (applicableDamageTypes.Contains(damage.stats.physical.type))
         {
             return true;
