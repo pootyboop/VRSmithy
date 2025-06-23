@@ -37,6 +37,8 @@ public class DamageTakeable : MonoBehaviour, IDamageable
     public DamageResistance resistance = new();
     [Tooltip("Damage dealt to this object gets passed along and dealt to owningDamageTakeable too. Avoid infinite loops!")]
     public DamageTakeable owner;
+    [Tooltip("If true, all descendant non-trigger Colliders without DamageTakeables added will get an empty DamageTakeable with this one as their owner, essentially adding them as additonal colliders for this DamageTakeable.")]
+    [SerializeField] bool includeEmptyChildColls = false;
     [Tooltip("Defines damage threshholds at which functions get called.")]
     [SerializeField] DamageThreshhold[] threshholds;
 
@@ -46,6 +48,7 @@ public class DamageTakeable : MonoBehaviour, IDamageable
     void Awake()
     {
         health = maxHealth;
+        UpdateDescendantColliders();
     }
 
     void Start()
@@ -61,7 +64,8 @@ public class DamageTakeable : MonoBehaviour, IDamageable
     public void Damage(Damage damage)
     {
         //hit itself
-        if (gameObject == damage.dealer.gameObject || gameObject == damage.literalDealer) {
+        if (gameObject == damage.dealer.gameObject || gameObject == damage.literalDealer)
+        {
             return;
         }
         print(damage.dealer + " hits " + this + " for " + damage.damageAmount);
@@ -170,6 +174,38 @@ public class DamageTakeable : MonoBehaviour, IDamageable
                 return true;
             default:
                 return false;
+        }
+    }
+
+    void UpdateDescendantColliders()
+    {
+        if (!includeEmptyChildColls)
+        {
+            return;
+        }
+
+        UpdateDescendantCollidersLoop(transform);
+    }
+
+    void UpdateDescendantCollidersLoop(Transform t)
+    {
+        foreach (Transform child in t)
+        {
+            UpdateDescendantCollidersLoop(child);
+        }
+
+        if (t.gameObject.layer != FaunaManager.instance.faunaLayer)
+        {
+            return;
+        }
+
+        if (t.GetComponent<DamageTakeable>() == null && t.TryGetComponent(out Collider coll))
+        {
+            if (!coll.isTrigger)
+            {
+                DamageTakeable newDamageTakeable = t.gameObject.AddComponent<DamageTakeable>();
+                newDamageTakeable.owner = this;
+            }
         }
     }
 }

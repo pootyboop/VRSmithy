@@ -199,6 +199,7 @@ GameObject:
   - component: {fileID: 2649885718689189821}
   - component: {fileID: 5746793329485847185}
   - component: {fileID: 2053421886006103237}
+  - component: {fileID: 3378469945666645017}
   m_Layer: 6
   m_Name: Player (XR Origin)
   m_TagString: Untagged
@@ -274,16 +275,16 @@ MonoBehaviour:
   rGameHand: {fileID: 3536422851744311841}
   lDesktopHandPos: {fileID: 1141054049473161635}
   rDesktopHandPos: {fileID: 6158300464315435225}
-  isVRMode: 0
+  isVRMode: 1
   handsTrackConsistently: 1
   mouseSensitivity: 0.05
   acceleration: 10
   maxSpeed: 3
   jumpStrength: 200
-  dodgeStrength: 30
-  dodgeDuration: 0.15
-  dodgeCooldownTime: 1.25
-  dodgeCooldownMovementSpeedPenalty: 0.75
+  dodgeStrength: 20
+  dodgeDuration: 0.05
+  dodgeCooldownTime: 0.75
+  dodgeCooldownMovementSpeedPenalty: 0.65
   crouchMovementSpeedPenalty: 0.5
   rotateDegrees: 45
   rotateCooldownTime: 0.4
@@ -358,6 +359,30 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.1
   m_Center: {x: 0, y: 0.1, z: 0}
+--- !u!114 &3378469945666645017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8083623944310118867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f89ace0faed05547a90fa355882413a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coll: {fileID: 5746793329485847185}
+  rb: {fileID: 2649885718689189821}
+  acceleration: 10
+  maxSpeed: 3
+  jumpStrength: 200
+  canJumpMidair: 0
+  onGroundedEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  onGroundedExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &8339506489740047451
 GameObject:
   m_ObjectHideFlags: 0

@@ -22,6 +22,7 @@ public class Player : MonoBehaviour
     public static Player instance;
     Rigidbody rb;
     CapsuleCollider coll;
+    MovementHelper mvmt;
     XRIDefaultInputActions controls;
     IEnumerator dodgeTimer, rotateCooldown;
 
@@ -43,6 +44,7 @@ public class Player : MonoBehaviour
     EPlayerMovementMode movementMode = EPlayerMovementMode.DEFAULT;
     private Vector2 movementInput = Vector2.zero, rotationInput = Vector2.zero;
     private Vector3 movementInputCleaned = Vector3.zero, dodgeInput = Vector3.zero;
+    private Vector3 preDodgeVelocity;
 
     //vals
     [Header("Movement")]
@@ -64,6 +66,7 @@ public class Player : MonoBehaviour
         instance = this;
         rb = GetComponent<Rigidbody>();
         coll = GetComponent<CapsuleCollider>();
+        mvmt = GetComponent<MovementHelper>();
         desktopCameraHeight = handCamParent.position.y;
         UpdateDeviceMode();
         SetMovementMode(movementMode);
@@ -71,14 +74,6 @@ public class Player : MonoBehaviour
 
     void UpdateDeviceMode()
     {
-        /*
-        if (isVRMode == UnityEngine.XR.XRSettings.isDeviceActive && !forceUpdate)
-        {
-            return;
-        }
-
-        isVRMode = UnityEngine.XR.XRSettings.isDeviceActive;
-        */
         print("Playing in " + (isVRMode ? "VR" : "PC") + " mode.");
 
         if (isVRMode)
@@ -213,7 +208,8 @@ public class Player : MonoBehaviour
 
     void Jump(InputAction.CallbackContext ctx)
     {
-        rb.AddForce(new Vector3(0f, jumpStrength, 0f));
+        //rb.AddForce(new Vector3(0f, jumpStrength, 0f));
+        mvmt.Jump();
     }
 
     void Dodge(InputAction.CallbackContext ctx)
@@ -233,6 +229,7 @@ public class Player : MonoBehaviour
         }
 
         dodgeInput *= dodgeStrength;
+        preDodgeVelocity = rb.linearVelocity;
 
         dodgeTimer = DodgeTimer();
         StartCoroutine(dodgeTimer);
@@ -264,7 +261,7 @@ public class Player : MonoBehaviour
             case EPlayerMovementMode.CROUCH:
                 if (movementInput != Vector2.zero && rb.linearVelocity.magnitude < maxSpeed)
                 {
-                    rb.AddForce(GetDesiredMovement(time));
+                    DesiredMovement(time);
                 }
                 break;
             case EPlayerMovementMode.DODGE:
@@ -274,30 +271,21 @@ public class Player : MonoBehaviour
         }
     }
 
-    private Vector3 GetDesiredMovement(float time)
+    private void DesiredMovement(float time)
     {
         movementInputCleaned = PrepareMovementInput(movementInput);
-
-        //multiply by acceleration speed, clamp to max speed
         Vector3 movementVector = movementInputCleaned * acceleration;
-
-        float plannedSpeed = (movementVector + rb.linearVelocity).magnitude / rb.mass * time;
-        if (plannedSpeed > maxSpeed)
-        {
-            movementVector = movementVector.normalized * (maxSpeed - plannedSpeed);
-        }
 
         if (dodgeTimer != null)
         {
             movementVector *= dodgeCooldownMovementSpeedPenalty;
         }
-
         if (movementMode == EPlayerMovementMode.CROUCH)
         {
             movementVector *= crouchMovementSpeedPenalty;
         }
 
-        return movementVector;
+        mvmt.Move(movementVector, time);
     }
 
     Vector3 PrepareMovementInput(Vector2 input)
@@ -333,6 +321,8 @@ public class Player : MonoBehaviour
             case EPlayerMovementMode.DODGE:
                 rb.linearVelocity = new Vector3(0f, rb.linearVelocity.y, 0f);
                 dodgeInput = Vector2.zero;
+                rb.linearVelocity = preDodgeVelocity;
+                preDodgeVelocity = Vector3.zero;
                 break;
             default:
                 break;

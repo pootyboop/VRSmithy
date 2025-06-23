@@ -103,12 +103,12 @@ public class ActiveRagdoll : MonoBehaviour
 
     void UpdatePhysicalAnim()
     {
+        //forces physical root to animated root position. looks glitchy
+        //physicalRoot.SetPositionAndRotation(animatedRoot.position, animatedRoot.rotation);
+
         for (int i = 0; i < physicalBones.Length; i++)
         {
             ConfigurableJointExtensions.SetTargetRotationLocal(joints[i], animatedBones[i].localRotation, initialJointRotations[i]);
         }
     }
-
-
-
 }

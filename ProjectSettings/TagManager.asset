@@ -16,8 +16,8 @@ TagManager:
   - GameHand
   - Gripped
   - Fauna
-  - 
-  - 
+  - FaunaBalancer
+  - PhysicsObject
   - 
   - 
   - 
