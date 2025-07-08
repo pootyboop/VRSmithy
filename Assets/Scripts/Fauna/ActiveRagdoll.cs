@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class ActiveRagdoll : MonoBehaviour
 {
+    [Header("Physics")]
     [SerializeField] private float positionSpring = 1500f;
     [SerializeField] private float positionDamper = 10f;
     [SerializeField] private float maximumForce = 3.402823e+38f;
@@ -10,7 +11,7 @@ public class ActiveRagdoll : MonoBehaviour
     [SerializeField] private float bounciness = 0f;
     [SerializeField] private float contactDistance = 0f;
 
-
+    [Header("References")]
     [SerializeField] private Transform physicalRoot, animatedRoot;
     [SerializeField] private Transform[] physicalBones, animatedBones;
     private ConfigurableJoint[] joints;
@@ -73,6 +74,14 @@ public class ActiveRagdoll : MonoBehaviour
                 joint.angularZLimit = softJointLimit;
 
                 joint.enableCollision = false;
+
+
+
+                if (physicalBones[i].TryGetComponent<Rigidbody>(out var jointRB))
+                {
+                    jointRB.collisionDetectionMode = CollisionDetectionMode.Continuous;
+                    //jointRB.useGravity = false;
+                }
             }
         }
     }

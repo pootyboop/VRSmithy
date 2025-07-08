@@ -21,7 +21,8 @@ public class Player : MonoBehaviour
     //refs
     public static Player instance;
     Rigidbody rb;
-    CapsuleCollider coll;
+    CapsuleCollider bodyColl;
+    SphereCollider feetColl;
     MovementHelper mvmt;
     XRIDefaultInputActions controls;
     IEnumerator dodgeTimer, rotateCooldown;
@@ -32,6 +33,9 @@ public class Player : MonoBehaviour
     public TrueHand lTrueHand, rTrueHand;
     public GameHand lGameHand, rGameHand;
     [SerializeField] Transform lDesktopHandPos, rDesktopHandPos;
+
+    PhysicsMaterial defaultPM;
+    [SerializeField] PhysicsMaterial dodgePM;
 
     //state
     [Header("Desktop Mode")]
@@ -48,9 +52,6 @@ public class Player : MonoBehaviour
 
     //vals
     [Header("Movement")]
-    [SerializeField] float acceleration = 10f;
-    [SerializeField] float maxSpeed = 10f;
-    [SerializeField] float jumpStrength = 10f;
     [SerializeField] float dodgeStrength = 2f;
     [SerializeField] float dodgeDuration = 0.25f;
     [SerializeField] float dodgeCooldownTime = 2f;
@@ -65,8 +66,11 @@ public class Player : MonoBehaviour
     {
         instance = this;
         rb = GetComponent<Rigidbody>();
-        coll = GetComponent<CapsuleCollider>();
+        bodyColl = GetComponent<CapsuleCollider>();
+        feetColl = GetComponent<SphereCollider>();
         mvmt = GetComponent<MovementHelper>();
+        defaultPM = bodyColl.material;
+        feetColl.material = defaultPM;
         desktopCameraHeight = handCamParent.position.y;
         UpdateDeviceMode();
         SetMovementMode(movementMode);
@@ -176,8 +180,8 @@ public class Player : MonoBehaviour
     {
         float groundOffset = .05f;
         float height = cam.transform.position.y - transform.position.y;
-        coll.center = new Vector3(0f, height / 2 + groundOffset, 0f);
-        coll.height = height - groundOffset;
+        bodyColl.center = new Vector3(0f, height / 2 + groundOffset, 0f);
+        bodyColl.height = height - groundOffset;
 
         Move(Time.fixedDeltaTime);
 
@@ -208,7 +212,6 @@ public class Player : MonoBehaviour
 
     void Jump(InputAction.CallbackContext ctx)
     {
-        //rb.AddForce(new Vector3(0f, jumpStrength, 0f));
         mvmt.Jump();
     }
 
@@ -259,13 +262,9 @@ public class Player : MonoBehaviour
             default:
             case EPlayerMovementMode.DEFAULT:
             case EPlayerMovementMode.CROUCH:
-                if (movementInput != Vector2.zero && rb.linearVelocity.magnitude < maxSpeed)
-                {
-                    DesiredMovement(time);
-                }
+                DesiredMovement(time);
                 break;
             case EPlayerMovementMode.DODGE:
-                //rb.AddForce(dodgeInput);
                 rb.linearVelocity = new Vector3(dodgeInput.x, rb.linearVelocity.y, dodgeInput.z);
                 break;
         }
@@ -273,8 +272,7 @@ public class Player : MonoBehaviour
 
     private void DesiredMovement(float time)
     {
-        movementInputCleaned = PrepareMovementInput(movementInput);
-        Vector3 movementVector = movementInputCleaned * acceleration;
+        Vector3 movementVector = PrepareMovementInput(movementInput);
 
         if (dodgeTimer != null)
         {
@@ -319,6 +317,8 @@ public class Player : MonoBehaviour
         switch (movementMode)
         {
             case EPlayerMovementMode.DODGE:
+                bodyColl.material = defaultPM;
+                feetColl.material = defaultPM;
                 rb.linearVelocity = new Vector3(0f, rb.linearVelocity.y, 0f);
                 dodgeInput = Vector2.zero;
                 rb.linearVelocity = preDodgeVelocity;
@@ -333,6 +333,8 @@ public class Player : MonoBehaviour
         switch (movementMode)
         {
             case EPlayerMovementMode.DODGE:
+                bodyColl.material = dodgePM;
+                feetColl.material = dodgePM;
                 break;
             default:
                 break;
@@ -441,6 +443,6 @@ public class Player : MonoBehaviour
             return;
         }
 
-        Physics.IgnoreCollision(coll, collider, newIgnore);
+        Physics.IgnoreCollision(bodyColl, collider, newIgnore);
     }
 }
