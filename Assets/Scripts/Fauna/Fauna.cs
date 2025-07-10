@@ -15,13 +15,18 @@ public class Fauna : MonoBehaviour
     IEnumerator headIKWeightCoroutine;
 
     [Header("Movement")]
+    [SerializeField] bool usePresetTarget = true;
+    [SerializeField] bool trackTarget = true;
     [SerializeField] Transform target;
+    [SerializeField] bool testAlwaysFollowTarget = false;
     [SerializeField] float rotationSpeed = 5f;
     [SerializeField] bool onlyRotateOnY = true;
 
     [Header("IK")]
     [SerializeField] float headTargetingTime = 1f;
     [SerializeField] MultiAimConstraint headIK;
+    Transform headIKTarget;
+    float headIKTrackingSpeed = .2f;
 
     void Awake()
     {
@@ -31,18 +36,31 @@ public class Fauna : MonoBehaviour
         mvmt = GetComponent<MovementHelper>();
         damageTakeable = GetComponent<DamageTakeable>();
         damageDealable = GetComponent<DamageDealable>();
+
+        headIKTarget = headIK.data.sourceObjects[0].transform;
+
         InitChildren(transform);
     }
 
     void Start()
     {
-        SetTarget(target);
+        if (usePresetTarget)
+        {
+            SetTarget(target);
+        }
+        else
+        {
+            SetTarget(null);
+        }
     }
 
 
     void FixedUpdate()
     {
-        UpdateTarget();
+        if (trackTarget)
+        {
+            UpdateTargeting();
+        }
     }
 
 
@@ -52,13 +70,13 @@ public class Fauna : MonoBehaviour
 
         if (target != null)
         {
-            headIK.data.sourceObjects[0].transform.SetParent(target, false);
             SetHeadIKWeight(1f);
         }
 
         else
         {
-            headIK.data.sourceObjects[0].transform.SetParent(headIK.transform, false);
+            headIKTarget.SetParent(headIK.transform, false);
+            headIKTarget.localPosition = Vector3.zero;
             SetHeadIKWeight(0f);
         }
     }
@@ -95,16 +113,21 @@ public class Fauna : MonoBehaviour
     }
 
 
-    void UpdateTarget()
+    void UpdateTargeting()
     {
         if (target == null)
         {
             return;
         }
-
+        
+        headIKTarget.position = Vector3.Lerp(headIKTarget.position, target.position, headIKTrackingSpeed);
+        
         //navMeshAgent.SetDestination(target.position);
         TurnTowardFaceTarget(Time.fixedDeltaTime);
-        mvmt.Move(transform.forward, Time.fixedDeltaTime);
+        if (testAlwaysFollowTarget)
+        {
+            mvmt.Move(transform.forward, Time.fixedDeltaTime);
+        }
     }
 
 

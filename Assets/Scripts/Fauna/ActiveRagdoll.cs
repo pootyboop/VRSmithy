@@ -12,10 +12,15 @@ public class ActiveRagdoll : MonoBehaviour
     [SerializeField] private float contactDistance = 0f;
 
     [Header("References")]
-    [SerializeField] private Transform physicalRoot, animatedRoot;
+    [SerializeField] private Transform physicalRoot;
+    [SerializeField] private Transform animatedRoot;
     [SerializeField] private Transform[] physicalBones, animatedBones;
     private ConfigurableJoint[] joints;
     private Quaternion[] initialJointRotations;
+
+    [Header("IK")]
+    [SerializeField] private FootIKSolver[] footIK;
+    [SerializeField] private int minFeetOnGroundWhileWalking = 2;
 
 
 
@@ -118,6 +123,40 @@ public class ActiveRagdoll : MonoBehaviour
         for (int i = 0; i < physicalBones.Length; i++)
         {
             ConfigurableJointExtensions.SetTargetRotationLocal(joints[i], animatedBones[i].localRotation, initialJointRotations[i]);
+        }
+    }
+
+
+    public bool CanStep(FootIKSolver foot)
+    {
+        if (footIK.Length <= minFeetOnGroundWhileWalking)
+        {
+            return true;
+        }
+
+        int feetOnGround = 0;
+
+        foreach (var currFoot in footIK)
+        {
+            if (currFoot != foot && !currFoot.IsGrounded())
+            {
+                feetOnGround++;
+            }
+        }
+
+        if (feetOnGround >= minFeetOnGroundWhileWalking)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public void SetFootIKsActive(bool newActive)
+    {
+        foreach (var currFoot in footIK)
+        {
+            currFoot.enabled = newActive;
         }
     }
 }
