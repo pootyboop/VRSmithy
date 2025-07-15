@@ -108,7 +108,7 @@ public class MovementHelper : MonoBehaviour
         {
             return;
         }
-        
+
         Vector3 movementVector = movement.normalized * movementAcceleration;
 
         float plannedSpeed = ((movementVector * time) + rb.linearVelocity).magnitude / rb.mass;
@@ -126,5 +126,11 @@ public class MovementHelper : MonoBehaviour
         }
 
         rb.AddForce(movementVector * time);
+    }
+
+    public float GetVelocity()
+    {
+        print(rb.linearVelocity.magnitude + " velocity");
+        return rb.linearVelocity.magnitude;
     }
 }
